@@ -1,6 +1,5 @@
 name: Update stack index with cron
 on:
-  push:
   schedule:
     - cron: '0 17 * * *' # everyday at 17:00 UTC
 jobs:
