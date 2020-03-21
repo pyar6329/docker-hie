@@ -35,7 +35,9 @@ FROM pyar6329/haskell:base-${GHC_VERSION} AS hie
 
 COPY --from=hie-build /home/haskell/.local/bin/. /usr/local/bin/
 COPY --from=hie-build /home/haskell/.hoogle /home/haskell/.hoogle
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
 FROM hie AS stack-update
@@ -43,6 +45,7 @@ FROM hie AS stack-update
 RUN set -x && \
   stack --no-terminal update
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
 FROM pyar6329/hie:base-${GHC_VERSION} AS hie-cron
@@ -50,4 +53,5 @@ FROM pyar6329/hie:base-${GHC_VERSION} AS hie-cron
 RUN set -x && \
   stack --no-terminal update
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
