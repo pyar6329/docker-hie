@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.0-experimental
-FROM pyar6329/haskell:8.6.4-llvm AS hie-build
-
-ARG GHC_VERSION=8.6.5
+ARG GHC_VERSION
 ARG HIE_VERSION
+
+FROM pyar6329/haskell:8.6.4-llvm AS hie-build
 
 USER root
 
