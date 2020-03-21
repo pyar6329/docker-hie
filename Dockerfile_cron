@@ -1,4 +1,5 @@
-ARG FLAVOR=8.6.5-base
+# syntax=docker/dockerfile:1.0-experimental
+ARG FLAVOR
 FROM pyar6329/hie:${FLAVOR} AS hie-cron
 
 RUN set -x && \

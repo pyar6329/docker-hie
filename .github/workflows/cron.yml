@@ -21,8 +21,8 @@ jobs:
         repository: pyar6329/hie
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        push: ${{ github.ref == 'refs/heads/master' }}
+        push: ${{ github.event_name == 'schedule' }}
         tags: ${{ matrix.ghc }},${{ matrix.ghc }}-${{ matrix.hie }}
         build_args: FLAVOR=${{ matrix.ghc }}-base-${{ matrix.hie }}
         target: hie-cron
-        dockerfile: Dockerfile.cron
+        dockerfile: Dockerfile_cron

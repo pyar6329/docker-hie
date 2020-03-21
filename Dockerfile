@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.0-experimental
 FROM pyar6329/haskell:8.6.4-llvm AS hie-build
 
 ARG GHC_VERSION
@@ -28,7 +29,7 @@ RUN set -x && \
 RUN set -x && \
   stack ./install.hs data
 
-ARG FLAVOR=8.6.5-base
+ARG FLAVOR
 FROM pyar6329/haskell:${FLAVOR} AS hie
 
 COPY --from=hie-build /home/haskell/.local/bin/. /usr/local/bin/
