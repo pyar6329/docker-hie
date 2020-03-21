@@ -43,9 +43,3 @@ RUN set -x && \
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
-FROM pyar6329/hie:${FLAVOR} AS hie-cron
-
-RUN set -x && \
-  stack --no-terminal update
-
-CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

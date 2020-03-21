@@ -25,3 +25,4 @@ jobs:
         tags: ${{ matrix.ghc }},${{ matrix.ghc }}-${{ matrix.hie }}
         build_args: FLAVOR=${{ matrix.ghc }}-base-${{ matrix.hie }}
         target: hie-cron
+        dockerfile: Dockerfile.cron
