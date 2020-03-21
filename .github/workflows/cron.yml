@@ -1,5 +1,6 @@
 name: Publish Docker
 on:
+  push:
   schedule:
     - cron: '0 17 * * *' # everyday at 17:00 UTC
 jobs:
@@ -25,4 +26,3 @@ jobs:
         tags: ${{ matrix.ghc }},${{ matrix.ghc }}-${{ matrix.hie }}
         build_args: GHC_VERSION=${{ matrix.ghc }}-${{ matrix.hie }}
         target: hie-cron
-        dockerfile: Dockerfile_cron

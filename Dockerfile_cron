@@ -1,8 +1,0 @@
-# syntax=docker/dockerfile:1.0-experimental
-ARG GHC_VERSION
-FROM pyar6329/hie:base-${GHC_VERSION} AS hie-cron
-
-RUN set -x && \
-  stack --no-terminal update
-
-CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

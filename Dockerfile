@@ -2,7 +2,7 @@
 ARG GHC_VERSION
 ARG HIE_VERSION
 
-FROM pyar6329/haskell:8.6.4-llvm AS hie-build
+FROM pyar6329/haskell:llvm-8.6.4 AS hie-build
 
 USER root
 
@@ -43,3 +43,9 @@ RUN set -x && \
 
 CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
+FROM pyar6329/hie:base-${GHC_VERSION} AS hie-cron
+
+RUN set -x && \
+  stack --no-terminal update
+
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
