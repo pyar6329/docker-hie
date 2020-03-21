@@ -29,7 +29,7 @@ RUN set -x && \
 RUN set -x && \
   stack ./install.hs data
 
-ARG FLAVOR
+ARG FLAVOR=8.6.5-base
 FROM pyar6329/haskell:${FLAVOR} AS hie
 
 COPY --from=hie-build /home/haskell/.local/bin/. /usr/local/bin/
