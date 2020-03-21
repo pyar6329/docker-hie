@@ -1,0 +1,28 @@
+{
+  "coc.preferences.formatOnSaveFiletypes": [
+    "haskell"
+  ],
+  "coc.preferences.rootPatterns": [],
+  "languageserver": {
+    "haskell": {
+      "command": "hie_low_memory",
+      "rootPatterns": [
+        "stack.yaml",
+        "cabal.config",
+        "package.yaml"
+      ],
+      "filetypes": [
+        "hs",
+        "lhs",
+        "haskell"
+      ],
+      "initializationOptions": {
+        "languageServerHaskell": {
+          "useCustomHieWrapper": true,
+          "hlintOn": true,
+          "formattingProvider": "brittany"
+        }
+      }
+    }
+  }
+}
