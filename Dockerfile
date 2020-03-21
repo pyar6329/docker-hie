@@ -28,25 +28,24 @@ RUN set -x && \
 RUN set -x && \
   stack ./install.hs data
 
-FROM ubuntu:18.04 AS hie
+ARG FLAVOR
+FROM pyar6329/haskell:${FLAVOR} AS hie
 
-ARG USERID=1000
-ARG GROUPID=1000
-ARG USERNAME=hie
+COPY --from=hie-build /home/haskell/.local/bin/. /usr/local/bin/
+COPY --from=hie-build /home/haskell/.hoogle /home/haskell/.hoogle
 
-ENV LANG="C.UTF-8" \
-    LC_ALL="C.UTF-8" \
-    DEBIAN_FRONTEND=noninteractive
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
+
+FROM hie AS stack-update
 
 RUN set -x && \
-  groupadd -r -g ${GROUPID} ${USERNAME} && \
-  useradd -m -g ${USERNAME} -u ${USERID} -d /home/${USERNAME} -s /bin/bash ${USERNAME}
+  stack --no-terminal update
 
-COPY --from=hie-build --chown=hie:hie /home/haskell/.local/bin/. /usr/local/bin/
-COPY --from=hie-build --chown=hie:hie /home/haskell/.hoogle /home/hie/.hoogle
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
-USER ${USERNAME}
+FROM pyar6329/hie:${FLAVOR} AS hie-cron
 
-WORKDIR /app
+RUN set -x && \
+  stack --no-terminal update
 
-CMD ["/usr/local/bin/hie", "--lsp"]
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"

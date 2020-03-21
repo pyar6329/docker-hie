@@ -21,6 +21,16 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         push: ${{ github.ref == 'refs/heads/master' }}
-        tags: ${{ matrix.ghc }},${{ matrix.ghc }}-${{ matrix.hie }}
-        build_args: HIE_VERSION=${{ matrix.hie }},GHC_VERSION=${{ matrix.ghc }}
+        tags: ${{ matrix.ghc }}-base,${{ matrix.ghc }}-base-${{ matrix.hie }}
+        build_args: HIE_VERSION=${{ matrix.hie }},GHC_VERSION=${{ matrix.ghc }},FLAVOR=${{ matrix.ghc }}-base
         target: hie
+    - name: Publish to Docker Registry ${{ matrix.ghc }}
+      uses: docker/build-push-action@v1
+      with:
+        repository: pyar6329/hie
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        push: ${{ github.ref == 'refs/heads/master' }}
+        tags: ${{ matrix.ghc }},${{ matrix.ghc }}-${{ matrix.hie }}
+        build_args: HIE_VERSION=${{ matrix.hie }},GHC_VERSION=${{ matrix.ghc }},FLAVOR=${{ matrix.ghc }}-base
+        target: stack-update
