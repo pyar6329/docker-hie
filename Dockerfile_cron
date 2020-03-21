@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.0-experimental
-ARG FLAVOR=8.6.5-base
-FROM pyar6329/hie:${FLAVOR} AS hie-cron
+ARG GHC_VERSION
+FROM pyar6329/hie:base-${GHC_VERSION} AS hie-cron
 
 RUN set -x && \
   stack --no-terminal update

@@ -23,6 +23,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         push: ${{ github.event_name == 'schedule' }}
         tags: ${{ matrix.ghc }},${{ matrix.ghc }}-${{ matrix.hie }}
-        build_args: FLAVOR=${{ matrix.ghc }}-base-${{ matrix.hie }}
+        build_args: GHC_VERSION=${{ matrix.ghc }}-${{ matrix.hie }}
         target: hie-cron
         dockerfile: Dockerfile_cron
