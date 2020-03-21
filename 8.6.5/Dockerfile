@@ -1,4 +1,4 @@
-FROM pyar6329/haskell:8.6.4 AS hie-build
+FROM pyar6329/haskell:8.6.4-llvm AS hie-build
 
 ARG GHC_VERSION="8.6.5"
 ARG HIE_VERSION="1.2"
@@ -18,11 +18,14 @@ RUN set -x && \
 WORKDIR /app/haskell-ide-engine
 
 RUN set -x && \
-  stack ./install.hs help && \
-  sed '4d' -i /home/haskell/.stack/config.yaml
+  sed -e 's/install-ghc: false//g' -i /home/haskell/.stack/config.yaml && \
+  sed '/^$/d' -i /home/haskell/.stack/config.yaml && \
+  stack ./install.hs help
 
 RUN set -x && \
-  stack ./install.hs hie-${GHC_VERSION} && \
+  stack ./install.hs hie-${GHC_VERSION}
+
+RUN set -x && \
   stack ./install.hs data
 
 FROM ubuntu:18.04
