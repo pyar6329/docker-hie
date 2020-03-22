@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if ! docker ps -a | grep hie > /dev/null 2>&1; then
+  docker run -i --rm -d \
+    -v ${HOME}/.ssh:/home/haskell/.ssh \
+    -v ${HOME}/.gitconfig:/home/haskell/.gitconfig \
+    -v $(pwd)/.hie-var/.stack:/home/haskell/.stack \
+    -v $(pwd):$(pwd) \
+    -v $(pwd)/.hie-var/.stack-work:$(pwd)/.stack-work \
+    -w $(pwd) \
+    --name hie pyar6329/hie:8.6.5
+fi
+exec docker exec -i hie hie +RTS -c -M4G -K4G -A128M -RTS --lsp

@@ -1,4 +1,7 @@
-FROM pyar6329/haskell:8.6.4-llvm AS hie-build
+# syntax=docker/dockerfile:1.0-experimental
+ARG GHC_VERSION
+
+FROM pyar6329/haskell:llvm-8.6.4 AS hie-build
 
 ARG GHC_VERSION
 ARG HIE_VERSION
@@ -28,25 +31,27 @@ RUN set -x && \
 RUN set -x && \
   stack ./install.hs data
 
-FROM ubuntu:18.04 AS hie
+FROM pyar6329/haskell:base-${GHC_VERSION} AS hie
 
-ARG USERID=1000
-ARG GROUPID=1000
-ARG USERNAME=hie
+COPY --from=hie-build /home/haskell/.local/bin/. /usr/local/bin/
+COPY --from=hie-build /home/haskell/.hoogle /home/haskell/.hoogle
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
-ENV LANG="C.UTF-8" \
-    LC_ALL="C.UTF-8" \
-    DEBIAN_FRONTEND=noninteractive
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
+
+FROM hie AS stack-update
 
 RUN set -x && \
-  groupadd -r -g ${GROUPID} ${USERNAME} && \
-  useradd -m -g ${USERNAME} -u ${USERID} -d /home/${USERNAME} -s /bin/bash ${USERNAME}
+  stack --no-terminal update
 
-COPY --from=hie-build --chown=hie:hie /home/haskell/.local/bin/. /usr/local/bin/
-COPY --from=hie-build --chown=hie:hie /home/haskell/.hoogle /home/hie/.hoogle
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
 
-USER ${USERNAME}
+FROM pyar6329/hie:base-${GHC_VERSION} AS hie-cron
 
-WORKDIR /app
+RUN set -x && \
+  stack --no-terminal update
 
-CMD ["/usr/local/bin/hie", "--lsp"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
