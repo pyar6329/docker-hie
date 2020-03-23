@@ -11,4 +11,7 @@ if ! [ -e "${STACK_ROOT}/global-project" ]; then
   cd ${WORKDIR}
 fi
 
-exec $@
+case "$1" in
+  "--wait" ) trap : TERM INT; sleep infinity & wait;;
+  * ) $@;;
+esac
