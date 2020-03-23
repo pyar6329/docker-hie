@@ -16,6 +16,17 @@ $ curl -L -o ~/.local/bin/hie_low_memory "https://raw.githubusercontent.com/pyar
 $ chmod +x ~/.local/bin/hie_low_memory
 ```
 
+This docker image mount ~/.ssh on container because stack may do git clone in package.yaml.
+However, if you want to use GitHub access token instead of ssh key, Set to environment variable like below.
+
+```bash
+# bash
+$ echo 'export GITHUB_TOKEN="your GitHub access token"' >> ~/.bashrc
+
+# zsh
+$ echo 'export GITHUB_TOKEN="your GitHub access token"' >> ~/.zshrc
+```
+
 VSCode
 
 ```bash

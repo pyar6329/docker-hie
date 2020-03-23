@@ -33,8 +33,8 @@ RUN set -x && \
 
 FROM pyar6329/haskell:base-${GHC_VERSION} AS hie
 
-COPY --from=hie-build /home/haskell/.local/bin/. /usr/local/bin/
-COPY --from=hie-build /home/haskell/.hoogle /home/haskell/.hoogle
+COPY --from=hie-build --chown=root:root /home/haskell/.local/bin/. /usr/local/bin/
+COPY --from=hie-build --chown=haskell:haskell /home/haskell/.hoogle /home/haskell/.hoogle
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
