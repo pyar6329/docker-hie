@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if ! [ -e "$(pwd)/stack.yaml" ]; then
   echo "Content-Length: 100\r\n\r"
   echo '{"jsonrpc":"2.0","id":1,"error":{"code":-32099,"message":"Cannot find stack.yaml"}}'
@@ -22,28 +24,12 @@ if ! [ -e "$(pwd)/.var/.stack-work" ]; then
   mkdir -p $(pwd)/.var/.stack-work
 fi
 
-GITCONFIG=$(cat << 'EOF'
-[credential]
-  helper = store
-[url "https://github.com/"]
-  insteadOf = ssh://git@github.com/
-  insteadOf = git@github.com:
-EOF
-)
-
 if [ -n "${GITHUB_TOKEN}" ]; then
-  if ! [ -e "$(pwd)/.var/.git-credentials" ]; then
-    echo "https://${GITHUB_TOKEN}:@github.com" > $(pwd)/.var/.git-credentials
-  fi
-  if ! [ -e "$(pwd)/.var/.gitconfig" ]; then
-    echo "${GITCONFIG}" > $(pwd)/.var/.gitconfig
-  fi
   if ! docker ps -a | grep hie > /dev/null 2>&1; then
     docker run -i --rm -d \
+      -e "GITHUB_TOKEN=${GITHUB_TOKEN}" \
       -v $(pwd):$(pwd) \
       -v ${HOME}/.ssh:/home/haskell/.ssh \
-      -v $(pwd)/.var/.gitconfig:/home/haskell/.gitconfig \
-      -v $(pwd)/.var/.git-credentials:/home/haskell/.git-credentials \
       -v $(pwd)/.var/.stack:/home/haskell/.stack \
       -v $(pwd)/.var/.stack-work:$(pwd)/.stack-work \
       -w $(pwd) \
