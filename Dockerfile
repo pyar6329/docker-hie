@@ -16,7 +16,11 @@ USER haskell
 WORKDIR /app
 
 RUN set -x && \
-  git clone --recursive -b ${HIE_VERSION} --single-branch --depth=1 https://github.com/haskell/haskell-ide-engine.git
+  if [ "${GHC_VERSION}" = "8.8.3" ]; then \
+    git clone --recursive --depth=1 https://github.com/haskell/haskell-ide-engine.git; \
+  else \
+    git clone --recursive -b ${HIE_VERSION} --single-branch --depth=1 https://github.com/haskell/haskell-ide-engine.git; \
+  fi
 
 WORKDIR /app/haskell-ide-engine
 
