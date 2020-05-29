@@ -22,12 +22,8 @@ RUN set -x && \
 WORKDIR /app/haskell-ide-engine
 
 RUN set -x && \
-  sed -e 's/install-ghc: false//g' -i /home/haskell/.stack/config.yaml && \
   sed '/^$/d' -i /home/haskell/.stack/config.yaml && \
-  sed -i -e "s/^resolver:.*/resolver: ${GHC_RESOLVER_VERSION}/g" install/shake.yaml && \
-  stack ./install.hs help
-
-RUN set -x && \
+  sed -e "s/^resolver:.*/resolver: ${GHC_RESOLVER_VERSION}/g" -i install/shake.yaml && \
   stack ./install.hs hie-${GHC_VERSION}
 
 RUN set -x && \
