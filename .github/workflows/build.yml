@@ -8,6 +8,7 @@ jobs:
       matrix:
         ghc: ['8.8.3']
         hie: ['1.4']
+        ghc-resolver: ['lts-15.7']
     env:
       DOCKER_BUILDKIT: 1
     steps:
@@ -64,7 +65,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         push: ${{ github.ref == 'refs/heads/master' }}
         tags: base-${{ matrix.ghc }},base-${{ matrix.ghc }}-${{ matrix.hie }}
-        build_args: HIE_VERSION=${{ matrix.hie }},GHC_VERSION=${{ matrix.ghc }}
+        build_args: HIE_VERSION=${{ matrix.hie }},GHC_VERSION=${{ matrix.ghc }},GHC_RESOLVER_VERSION=${{ matrix.ghc-resolver }}
         target: hie
     - name: Publish to Docker Registry ${{ matrix.ghc }}
       uses: docker/build-push-action@v1
@@ -74,5 +75,5 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         push: ${{ github.ref == 'refs/heads/master' }}
         tags: ${{ matrix.ghc }},${{ matrix.ghc }}-${{ matrix.hie }}
-        build_args: HIE_VERSION=${{ matrix.hie }},GHC_VERSION=${{ matrix.ghc }}
+        build_args: HIE_VERSION=${{ matrix.hie }},GHC_VERSION=${{ matrix.ghc }},GHC_RESOLVER_VERSION=${{ matrix.ghc-resolver }}
         target: stack-update

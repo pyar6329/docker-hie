@@ -5,6 +5,7 @@ FROM pyar6329/haskell:llvm-8.8.3 AS hie-build
 
 ARG GHC_VERSION
 ARG HIE_VERSION
+ARG GHC_RESOLVER_VERSION
 
 USER root
 
@@ -23,6 +24,7 @@ WORKDIR /app/haskell-ide-engine
 RUN set -x && \
   sed -e 's/install-ghc: false//g' -i /home/haskell/.stack/config.yaml && \
   sed '/^$/d' -i /home/haskell/.stack/config.yaml && \
+  sed -i -e "s/^resolver:.*/resolver: ${GHC_RESOLVER_VERSION}/g" install/shake.yaml && \
   stack ./install.hs help
 
 RUN set -x && \
