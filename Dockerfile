@@ -6,8 +6,6 @@ FROM pyar6329/haskell:llvm-8.8.3 AS hie-build
 ARG GHC_VERSION
 ARG HIE_VERSION
 ARG GHC_RESOLVER_VERSION
-# hoogle doesn't exist in lts-15.14 (ghc-8.8.3), so use lts-14.27 (ghc-8.6.5)
-ARG HOOGLE_GHC_RESOLVER_VERSION="lts-14.27"
 
 USER root
 
