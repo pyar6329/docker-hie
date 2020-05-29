@@ -6,6 +6,8 @@ FROM pyar6329/haskell:llvm-8.8.3 AS hie-build
 ARG GHC_VERSION
 ARG HIE_VERSION
 ARG GHC_RESOLVER_VERSION
+# hoogle doesn't exist in lts-15.14 (ghc-8.8.3), so use lts-14.27 (ghc-8.6.5)
+ARG HOOGLE_GHC_RESOLVER_VERSION="lts-14.27"
 
 USER root
 
@@ -27,6 +29,8 @@ RUN set -x && \
   stack ./install.hs hie-${GHC_VERSION}
 
 RUN set -x && \
+  sed -e 's/install-ghc: false//g' -i /home/haskell/.stack/config.yaml && \
+  sed -e "s/^resolver:.*/resolver: ${HOOGLE_GHC_RESOLVER_VERSION}/g" -i install/shake.yaml && \
   stack ./install.hs data
 
 FROM pyar6329/haskell:base-${GHC_VERSION} AS hie
