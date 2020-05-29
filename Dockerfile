@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.0-experimental
 ARG GHC_VERSION
 
-FROM pyar6329/haskell:8.6.5 AS hie-build
+FROM pyar6329/haskell:llvm-8.8.3 AS hie-build
 
 ARG GHC_VERSION
 ARG HIE_VERSION
@@ -16,11 +16,7 @@ USER haskell
 WORKDIR /app
 
 RUN set -x && \
-  if [ "${GHC_VERSION}" = "8.8.3" ]; then \
-    git clone --recursive --depth=1 https://github.com/haskell/haskell-ide-engine.git; \
-  else \
-    git clone --recursive -b ${HIE_VERSION} --single-branch --depth=1 https://github.com/haskell/haskell-ide-engine.git; \
-  fi
+  git clone --recursive -b ${HIE_VERSION} --single-branch --depth=1 https://github.com/haskell/haskell-ide-engine.git
 
 WORKDIR /app/haskell-ide-engine
 
